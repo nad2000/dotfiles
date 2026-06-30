@@ -31,15 +31,16 @@ set use_from=yes
 set envelope_from = yes
 ## set sendmail = "/usr/bin/msmtp"
 # set sendmail="/path/to/msmtp --host=mailhub -f me@example.com --tls --tls-trust-file=trust.crt"
-
+#
+set imap_deflate = yes
 # Source the accounts
 source ~/.config/neomutt/accounts/gmail
 source ~/.config/neomutt/accounts/private_imap
 
 # Hotkeys to switch profiles on the fly
 macro index,pager <F2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail<enter><change-folder>!<enter>' "Switch to Gmail"
-# macro index,pager <F3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/private_imap<enter><change-folder>!<enter>' "Switch to Private IMAP"
-macro index,pager <F3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/private_imap<enter><change-folder>=$spoolfile<enter>' "Switch to Private IMAP"
+macro index,pager <F3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/private_imap<enter><change-folder>!<enter>' "Switch to Private IMAP"
+# macro index,pager <F3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/private_imap<enter><change-folder>=$spoolfile<enter>' "Switch to Private IMAP"
 
 macro generic "<esc>1" ":set from=rad@prodata.nz"
 macro generic "<esc>3" ":set from=nad2000@gmail.com"

@@ -1,0 +1,3 @@
+text/html; w3m -I %{charset} -T text/html -dump %s; copiousoutput
+text/plain; nvim -R %s; copiousoutput
+text/*; nvim -R %s
