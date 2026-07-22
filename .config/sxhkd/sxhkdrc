@@ -1,7 +1,7 @@
 # To capture the keys use: xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
 # Basic binds
 super + Return
-	st -e tmux
+	st -e tmux -2 -u
 super + shift + q
 	kill -9 `xdotool getwindowfocus getwindowpid`
 super + d

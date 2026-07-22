@@ -12,6 +12,7 @@ vim.o.shell='/bin/zsh'
 -- vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.o.autochdir = true
+vim.o.termguicolors = true
 -- Switch between buffers without saving
 -- vim.o.hidden = true
 vim.opt.path:append("**")
@@ -41,6 +42,8 @@ vim.g.mapleader = " " -- ","
 vim_started_in_dir = vim.fn.getcwd()
 -- execute "autocmd! VimLeave * mksession!" . vim_started_in_dir . "/.session.vim"
 vim.cmd("autocmd! VimLeave * mksession!" .. vim_started_in_dir .. "/.session.vim")
+-- ESC in trminal
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true })
 
 -- map key to dismiss search highlightedness
 vim.keymap.set("n", "<bs>", ':noh<cr>')
@@ -122,6 +125,8 @@ if not is_view then
   -- Plug 'google/yapf', { 'rtp': 'plugins/vim', 'for': 'python' }
   -- Automatically sort python imports
   Plug 'fisadev/vim-isort'
+  Plug 'dense-analysis/ale'
+
   vim.g.vim_isort_map = ''
   Plug('psf/black', { tag = '19.10b0' })
   vim.g.black_linelength = 99
@@ -151,7 +156,7 @@ end
 Plug 'jnurmine/Zenburn'
 Plug 'christoomey/vim-tmux-navigator'
 -- Plug 'alexghergh/nvim-tmux-navigation'
-Plug('Valloric/YouCompleteMe', { ['do'] = './install.py --clang-completer --gocode-completer' })
+-- Plug('Valloric/YouCompleteMe', { ['do'] = './install.py --clang-completer --gocode-completer' })
 Plug 'ojroques/nvim-hardline'
 Plug 'junegunn/goyo.vim'
 -- Plug 'nvim-lualine/lualine.nvim'
@@ -270,7 +275,7 @@ augroup FileTypes
   " au FileType python imap <c-s-y> <c-o>:call yapf#YAPF()<cr>
   au FileType python nmap <c-s-b> <c-o>:keepmarks Black<cr>
   au FileType python imap <c-s-b> <c-o>:keepmarks Black<cr>
-  au FileType python let g:ale_linters = {'python': ['flake8']}
+  " au FileType python let g:ale_linters = {'python': ['flake8']}
   au FileType javascript setlocal sw=2 | iabbrev <buffer> iff if ()<esc>i
   au FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
   au FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
@@ -308,10 +313,21 @@ augroup FileTypes
   " Skeleton files
   " au! BufNewFile * silent! 0r ~/.vim/skel/template.%
 augroup END
-let g:ale_fix_on_save = 1
+" let g:ale_fix_on_save = 1
 nmap <F8> :TagbarToggle<CR>
 ]]
-
+vim.g.ale_linters = {
+    python = {'ruff'},
+}
+vim.g.ale_fixers = {
+    python = {'ruff', 'remove_trailing_lines', 'trim_whitespace'},
+}
+vim.g.ale_fix_on_save = 1
+vim.g.ale_lint_on_text_changed = 'always'
+vim.g.ale_lint_on_save = 1
+vim.g.ale_python_flake8_executable = ''
+vim.g.ale_python_pylint_executable = ''
+vim.g.ale_python_pycodestyle_executable = ''
 
 if is_view then
   vim.keymap.set("n", "Q", "gq")

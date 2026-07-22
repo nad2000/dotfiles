@@ -1,19 +1,8 @@
 # vim: filetype=neomuttrc
 
-# protect imap and sendmail passwords with GPG
-# encripted fragment of the configuration
-## source "gpg -d ~/.mutt/passwords.gpg |"
-
 # Ensure TLS is enforced
 set ssl_starttls = yes
 set ssl_force_tls = yes
-set ssl_use_sslv2=no
-set ssl_use_sslv3=no
-set ssl_use_tlsv1=no
-set ssl_use_tlsv1_1=no
-set ssl_use_tlsv1_2=yes
-set ssl_verify_dates=yes
-set ssl_verify_host=yes
 
 set abort_nosubject = no
 set mail_check = 60
@@ -24,34 +13,6 @@ set sort_aux=last-date-received
 set signature = "~/.mutt/signature"
 set copy = no
 
-# gpg -r nad2000@gmail.com  --use-agent --quiet --batch -e  -o ~/.passwd/nad2000.gpg <<<"[PASSWORD]"
-# OR find the keys: gpg --list-secret-keys
-# and  encrypt
-# gpg --user [KEY ID]  --use-agent --quiet --batch -e  -o ~/.passwd/nad2000.gpg <<<"[PASSWORD]"
-set my_gmail_pass = "`gpg --use-agent --quiet --batch -d ~/.passwd/nad2000.gpg`"
-# Smtp settings
-# set smtp_url = "smtps://nad2000@smtp.gmail.com"
-# set smtp_url = "smtps://nad2000@gmail.com@smtp.gmail.com"
-# set smtp_url = "smtps://nad2000@gmail.com:$my_gmail_pass@smtp.gmail.com:465/"
-# set smtp_url = "smtp://mail.prodata.nz:25/
-
-# IMAP settings
-set imap_user = "nad2000@gmail.com"
-set imap_pass = $my_gmail_pass
-
-# Remote gmail folders
-set folder = "imaps://imap.gmail.com/"
-set spoolfile = "+INBOX"
-# mailboxes = +INBOX \
-#   "+[Gmail]/Drafts" \
-#   "+[Gmail]/Sent Mail"
-set imap_check_subscribed
-set record = "+INBOX"
-# folder-hook . 'set record="^"'
-set postponed = "+[Gmail]/Drafts"
-# set record = "+[Gmail]/Sent Mail"
-# set trash = "+[Gmail]/Trash"
-set trash = "+[Gmail]/Bin"
 # Gmail-style keyboard shortcuts
 bind index g noop
 macro index ga "<change-folder>=[Gmail]/All Mail<enter>" "Go to all mail"
@@ -69,17 +30,20 @@ macro index,pager A "<save-message>=[Gmail]/All Mail<enter><enter>" "Archive"
 set use_from=yes
 set envelope_from = yes
 ## set sendmail = "/usr/bin/msmtp"
-# set hostname="example.com"
-set realname = "Rad C."
-## set from = "nad2000@gmail.com"
-set from = "rad@prodata.nz"
-set mbox_type=Maildir
-
 # set sendmail="/path/to/msmtp --host=mailhub -f me@example.com --tls --tls-trust-file=trust.crt"
+
+# Source the accounts
+source ~/.config/neomutt/accounts/gmail
+source ~/.config/neomutt/accounts/private_imap
+
+# Hotkeys to switch profiles on the fly
+macro index,pager <F2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail<enter><change-folder>!<enter>' "Switch to Gmail"
+# macro index,pager <F3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/private_imap<enter><change-folder>!<enter>' "Switch to Private IMAP"
+macro index,pager <F3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/private_imap<enter><change-folder>=$spoolfile<enter>' "Switch to Private IMAP"
 
 macro generic "<esc>1" ":set from=rad@prodata.nz"
 macro generic "<esc>3" ":set from=nad2000@gmail.com"
-macro generic "<esc>2" ":set from=rad@prodata.co.nz"
+macro generic "<esc>2" ":set from=damien@prodata.co.nz"
 
 alias gmail    Rad C. <nad2000@gmail.com>
 alias prodata  Rad C. <rad@prodata.nz>
@@ -103,19 +67,8 @@ alias f__2  Rad C. <rad@prodata.nz>
 # =github
 # ######### END IMAP FOLDERS
 
-
-# Activate caching, as it can greatly improve speed
-set header_cache = "~/.mutt/cache/headers/"
-## LMDB is still faster
-set header_cache_backend = "lmdb"
-# set header_cache_backend = "bdb"
-# set header_cache_compress_method = 'zstd'
-# set header_cache_compress_level = 10
-set message_cachedir = "~/.mutt/cache/bodies"
-
-# Disable saving outgoing mail since Gmail saves them by default.
-set record = ""
-
+# # Disable saving outgoing mail since Gmail saves them by default.
+# set record = ""
 
 # set mailcap_path = /usr/local/share/mutt-wizard/mailcap
 set date_format="%y/%m/%d %I:%M%p"
@@ -283,8 +236,8 @@ color body red default "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-
 
 
 # GPG
-## source ~/.mutt/gpg.rc
-source /etc/neomuttrc.d/gpg.rc
+source ~/.mutt/gpg.rc
+## source /etc/neomuttrc.d/gpg.rc
 set pgp_encrypt_only_command="/usr/libexec/neomutt/pgpewrap gpg --throw-keys --batch --quiet --no-verbose --output - --textmode --armor --encrypt -- --recipient %r -- %f"
 set pgp_encrypt_sign_command="/usr/libexec/neomutt/pgpewrap gpg %?p?--pinentry-mode loopback --passphrase-fd 0? --throw-keys --batch --quiet --no-verbose --textmode --output - %?a?--local-user %a? --armor --sign --encrypt -- --recipient %r -- %f"
 
