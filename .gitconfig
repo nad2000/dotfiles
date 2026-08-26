@@ -8,7 +8,7 @@
 	dump = cat-file -p
 [user]
 	email = nad2000@gmail.com
-	name = Rad Cirskis
+	name = Damien aka Rad
 [push]
 	default = simple
 	followTags = true
