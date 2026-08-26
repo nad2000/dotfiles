@@ -216,8 +216,8 @@ NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 #which /usr/bin/setxkbmap &>/dev/null && /usr/bin/setxkbmap -option "caps:swapescape"
 
 if [ -d $HOME/dotnet ] ; then
-  export DOTNET_ROOT=$HOME/dotnet
-  export PATH=$PATH:$HOME/dotnet
+  export DOTNET_ROOT=$HOME/.dotnet
+  export PATH=$PATH:$HOME/.dotnet
 fi
 
 # # IBus support:
@@ -231,3 +231,4 @@ export XMODIFIERS='@im=fcitx'
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f $PREFIX/etc/profile.d/command-not-found.sh ] && source $PREFIX/etc/profile.d/command-not-found.sh
